@@ -1,4 +1,28 @@
+<?php
+    require_once 'config/dataBase.php';
+    require_once 'classes/Cour.php';
+    session_start();
 
+
+    $pageActuel=$_GET['page'];
+    $db=new Database();
+    $conn=$db->getConnection();
+
+    $newCour=new Cour($conn,1,"","","",1,"");
+
+    $NombreTotalCours=$newCour->nombreTotalcours();
+    $nombrePages=ceil($NombreTotalCours/3);
+
+    $nombreOfsset=($pageActuel-1)*3;
+
+    $cours= $newCour->afficherTousLesCours($nombreOfsset);
+
+    
+
+    //var_dump($nombrePages);
+    //var_dump($NombreTotalCours);
+    
+?>
 
 <!DOCTYPE html>
 <html lang="fr">
@@ -107,27 +131,28 @@
         <h2 class="text-3xl font-bold text-gray-800 mb-8">Cours populaires</h2>
         <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
             <!-- Carte de cours 1 -->
+             <?php foreach($cours as $cour): ?>
             <div class="bg-white rounded-lg shadow-md overflow-hidden">
-                <img src="https://placehold.co/600x400/blue/white" alt="Cours de programmation" class="w-full h-48 object-cover">
+                <img src="<?php echo $cour['img_url']?>" alt="Photo_Cour" class="w-full h-48 object-cover">
                 <div class="p-6">
                     <div class="flex justify-between items-center  mb-2">
                         <div class="flex items-center">
                             <img src="https://placehold.co/32x32" alt="Avatar" class="w-8 h-8 rounded-full mr-2">
-                            <span class="text-gray-700">Par Jean Dupont</span>
+                            <span class="text-gray-700"><?php echo $cour['id_enseignant']?></span>
                         </div>
                         
-                        <span class="text-blue-600 text-sm font-semibold">Programmation</span>
+                        <span class="text-blue-600 text-sm font-semibold"><?php echo $cour['id_categorie']?></span>
                     </div>
                     
-                    <h3 class="text-xl font-bold text-gray-800 mt-2">Introduction au développement web</h3>
-                    <p class="text-gray-600 mt-2">Apprenez les bases du développement web avec HTML, CSS et JavaScript.</p>
+                    <h3 class="text-xl font-bold text-gray-800 mt-2"><?php echo $cour['titre']?></h3>
+                    <p class="text-gray-600 mt-2"><?php echo $cour['description']?></p>
                     <div class="flex flex-wrap gap-2 mt-3">
                         <span class="bg-gray-100 text-gray-700 px-2 py-1 rounded-full text-sm">#html</span>
                         <span class="bg-gray-100 text-gray-700 px-2 py-1 rounded-full text-sm">#css</span>
                         <span class="bg-gray-100 text-gray-700 px-2 py-1 rounded-full text-sm">#javascript</span>
                     </div>
                     <div class="mt-4 flex items-center justify-between">
-                        <span class="text-gray-800 font-bold">49.99 €</span>
+                        <span class="text-gray-800 font-bold"><?php echo $cour['prix']?></span>
                         <span class="text-sm text-gray-600">⭐ 4.8 (128 avis)</span>
                     </div>
                     <a href="#" class="mt-4 block text-center bg-blue-600 text-white py-2 px-4 rounded-md hover:bg-blue-700">
@@ -135,75 +160,29 @@
                     </a>
                 </div>
             </div>
-
-            <!-- Carte de cours 2 -->
-            <div class="bg-white rounded-lg shadow-md overflow-hidden">
-                <img src="https://placehold.co/600x400/purple/white" alt="Cours de design" class="w-full h-48 object-cover">
-                <div class="p-6">
-                <div class="flex justify-between items-center  mb-2">
-                        <div class="flex items-center">
-                            <img src="https://placehold.co/32x32" alt="Avatar" class="w-8 h-8 rounded-full mr-2">
-                            <span class="text-gray-700">Victor sanchez</span>
-                        </div>
-                        
-                        <span class="text-blue-600 text-sm font-semibold">Design</span>
-                </div>
-                    <h3 class="text-xl font-bold text-gray-800 mt-2">UI/UX Design Moderne</h3>
-                    <p class="text-gray-600 mt-2">Maîtrisez les principes du design d'interface et de l'expérience utilisateur.</p>
-                    <div class="flex flex-wrap gap-2 mt-3">
-                        <span class="bg-gray-100 text-gray-700 px-2 py-1 rounded-full text-sm">#design</span>
-                        <span class="bg-gray-100 text-gray-700 px-2 py-1 rounded-full text-sm">#ui</span>
-                        <span class="bg-gray-100 text-gray-700 px-2 py-1 rounded-full text-sm">#ux</span>
-                    </div>
-                    <div class="mt-4 flex items-center justify-between">
-                        <span class="text-gray-800 font-bold">59.99 €</span>
-                        <span class="text-sm text-gray-600">⭐ 4.9 (95 avis)</span>
-                    </div>
-                    <a href="#" class="mt-4 block text-center bg-blue-600 text-white py-2 px-4 rounded-md hover:bg-blue-700">
-                        Voir le cours
-                    </a>
-                </div>
-            </div>
-
-            <!-- Carte de cours 3 -->
-            <div class="bg-white rounded-lg shadow-md overflow-hidden">
-                <img src="https://placehold.co/600x400/green/white" alt="Cours de marketing" class="w-full h-48 object-cover">
-                <div class="p-6">
-                <div class="flex justify-between items-center  mb-2">
-                        <div class="flex items-center">
-                            <img src="https://placehold.co/32x32" alt="Avatar" class="w-8 h-8 rounded-full mr-2">
-                            <span class="text-gray-700">Par Sophie Bernard</span>
-                        </div>
-                        
-                        <span class="text-blue-600 text-sm font-semibold">Marketing</span>
-                </div>
-                    <h3 class="text-xl font-bold text-gray-800 mt-2">Marketing Digital</h3>
-                    <p class="text-gray-600 mt-2">Développez votre présence en ligne et maîtrisez les stratégies digitales.</p>
-                    <div class="flex flex-wrap gap-2 mt-3">
-                        <span class="bg-gray-100 text-gray-700 px-2 py-1 rounded-full text-sm">#marketing</span>
-                        <span class="bg-gray-100 text-gray-700 px-2 py-1 rounded-full text-sm">#digital</span>
-                        <span class="bg-gray-100 text-gray-700 px-2 py-1 rounded-full text-sm">#seo</span>
-                    </div>
-                    <div class="mt-4 flex items-center justify-between">
-                        <span class="text-gray-800 font-bold">39.99 €</span>
-                        <span class="text-sm text-gray-600">⭐ 4.7 (156 avis)</span>
-                    </div>
-                    <a href="#" class="mt-4 block text-center bg-blue-600 text-white py-2 px-4 rounded-md hover:bg-blue-700">
-                        Voir le cours
-                    </a>
-                </div>
-            </div>
+            <?php endforeach; ?>
+            
         </div>
 
         <!-- Pagination -->
         <div class="flex justify-center items-center space-x-2 mt-12">
-            <a href="#" class="px-4 py-2 border rounded-md hover:bg-gray-50">Précédent</a>
-            <a href="#" class="px-4 py-2 border rounded-md hover:bg-gray-50 bg-blue-600 text-white">1</a>
-            <a href="#" class="px-4 py-2 border rounded-md hover:bg-gray-50">2</a>
-            <a href="#" class="px-4 py-2 border rounded-md hover:bg-gray-50">3</a>
-            <a href="#" class="px-4 py-2 border rounded-md hover:bg-gray-50">4</a>
-            <a href="#" class="px-4 py-2 border rounded-md hover:bg-gray-50">5</a>
-            <a href="#" class="px-4 py-2 border rounded-md hover:bg-gray-50">Suivant</a>
+
+            <a href="index.php?page=<?php echo ($_GET['page'] == 1) ? "1" : $_GET['page'] - 1; ?>"
+                class="px-4 py-2 border rounded-md hover:bg-blue-50">
+                Précédent
+            </a>
+
+            <?php for($i = 0; $i < $nombrePages; $i++): ?>
+                <a href="index.php?page=<?php echo $i + 1; ?>" 
+                    class="px-4 py-2 border rounded-md hover:bg-gray-50 <?php echo ($_GET['page'] == $i + 1) ? 'bg-blue-600 text-white' : ''; ?>">
+                    <?php echo $i + 1; ?>
+                </a>
+            <?php endfor; ?>
+
+            <a href="index.php?page=<?php echo ($_GET['page'] == $nombrePages) ? $nombrePages : $_GET['page'] + 1; ?>"
+                class="px-4 py-2 border rounded-md hover:bg-blue-50">
+                Suivant
+            </a>
         </div>
     </div>
 </body>
