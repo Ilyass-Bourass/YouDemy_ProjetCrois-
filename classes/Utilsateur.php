@@ -1,11 +1,11 @@
 <?php 
 
 class Utilisateur {
-    private $connexion;
-    private $id_utilisateur;
-    private $nom;
-    private $email;
-    private $motpass;
+    protected $connexion;
+    protected $id_utilisateur;
+    protected $nom;
+    protected $email;
+    protected $motpass;
 
     private $errors = [];
     private $errorsLogin=[];
@@ -22,7 +22,7 @@ class Utilisateur {
         return $this->errorsLogin;
     }
 
-    public function register($name,$email,$password,$role){
+    public function register($name,$email,$password,$role,$status){
         if(empty($name) || strlen($name)<3){
             array_push($this->errors,"le nom doit étre non vide et contient au moin 3 caractére");
         }
@@ -49,13 +49,14 @@ class Utilisateur {
                 return false;
             }
             $passwordHash=password_hash($password,PASSWORD_BCRYPT);
-            $query = "INSERT INTO users (name, email, password,role) VALUES (:name, :email, :password,:role)";
+            $query = "INSERT INTO users (name, email, password,role,status) VALUES (:name, :email, :password,:role,:statu)";
             $stmt = $this->connexion->prepare($query);
             $stmt->execute([
                 ':name' => $name, 
                 ':email' => $email, 
                 ':password' => $passwordHash,
-                ':role'=>$role
+                ':role'=>$role,
+                ':statu'=>$status
             ]);
             return true;
         }
@@ -93,5 +94,9 @@ class Utilisateur {
         }
         return false;
     }
+
+    
+
+    
 }
 ?>
