@@ -17,6 +17,7 @@ CREATE TABLE users (
 CREATE TABLE categories (
     id_categorie INT PRIMARY KEY AUTO_INCREMENT,
     name_categorie VARCHAR(100) NOT NULL,
+    description TEXT,
     created_at DATETIME DEFAULT CURRENT_TIMESTAMP
 );
 
@@ -30,23 +31,14 @@ CREATE TABLE cours (
     id_categorie INT NOT NULL,
     prix DECIMAL(10,2),
     created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
-    FOREIGN KEY (id_enseignant) REFERENCES users(id_user) ON DELETE CASCADE,
-    FOREIGN KEY (id_categorie) REFERENCES categories(id_categorie) ON DELETE CASCADE
-);
-
-create table cours_content(
-	id_cour_content INT PRIMARY KEY AUTO_INCREMENT,
-    id_cour INT NOT NULL,
-    cour_type ENUM('VIDEO','DOCUMENT'),
-    content_video_url  VARCHAR(255) DEFAULT NULL,
-    content_document TEXT DEFAULT NULL,
-    FOREIGN KEY (id_cour) REFERENCES cours(id_cour) ON DELETE CASCADE
+    FOREIGN KEY (id_enseignant) REFERENCES users(id_user),
+    FOREIGN KEY (id_categorie) REFERENCES categories(id_categorie)
 );
 
 -- Table des tags
 CREATE TABLE tags (
     id_tag INT PRIMARY KEY AUTO_INCREMENT,
-    tag_name VARCHAR(50) NOT NULL UNIQUE,
+    name VARCHAR(50) NOT NULL UNIQUE,
     created_at DATETIME DEFAULT CURRENT_TIMESTAMP
 );
 
@@ -72,3 +64,13 @@ CREATE TABLE inscriptions_cours (
     FOREIGN KEY (id_cour) REFERENCES cours(id_cour) ON DELETE CASCADE
 );
 
+-- Insertion des données de test pour les catégories
+INSERT INTO categories (name, description) VALUES 
+('Développement Web', 'Cours de développement web et technologies associées'),
+('Design', 'Cours de design graphique et UX/UI'),
+('Marketing Digital', 'Cours de marketing en ligne'),
+('Langues', 'Cours de langues étrangères');
+
+-- Insertion d'un administrateur par défaut
+INSERT INTO users (name, email, password, role, status) VALUES
+('Admin', 'admin@youdemy.com', '$2y$10$secure_hash_here', 'ADMIN', 'active');

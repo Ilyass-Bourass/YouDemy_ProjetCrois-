@@ -4,7 +4,7 @@
     require_once 'classes/courTags.php';
 
     session_start();
-
+    //var_dump($_SESSION);
     if (!isset($_GET['page'])) {
         header('Location: index.php?page=1');
         exit();
@@ -32,7 +32,7 @@
 
     $newCourTag=new CourTag($conn);
 
-    //var_dump($newCourTag->getALLtagsCour(10));
+     var_dump($cours);
     
 
     //var_dump($nombrePages);
@@ -173,9 +173,16 @@
                         <span class="text-gray-800 font-bold"><?php echo $cour['prix']?></span>
                         <span class="text-sm text-gray-600">⭐ 4.8 (128 avis)</span>
                     </div>
-                    <a href="#" class="mt-4 block text-center bg-blue-600 text-white py-2 px-4 rounded-md hover:bg-blue-700">
-                        Voir le cours
-                    </a>
+                    <?php if(isset($_SESSION['is_login']) && $_SESSION['role']=="ETUDIANT"):?>
+                        <a href="actions/inscriptionCour.php?id_user=<?= $_SESSION['user_id'] ?>
+                                                            &id_cour=<?php echo $cour['id_cour'] ?>
+                                                            &id_enseignant=<?= $cour['id_enseignant']?>"
+                          class="mt-4 block text-center bg-blue-600 text-white py-2 px-4 rounded-md hover:bg-blue-700">
+                            inscris-cour
+                        </a>
+                    <?php else:?>
+                        <a href="pages/register.php" class="mt-4 block text-center bg-blue-600 text-white py-2 px-4 rounded-md hover:bg-blue-700">inscris-cour</a>
+                    <?php endif;?>
                 </div>
             </div>
             <?php endforeach; ?>

@@ -52,7 +52,7 @@
                 $query->execute([
                     ":id_cour" => $id_cour
                 ]);
-                return $query->fetch(PDO::FETCH_ASSOC); // Retourne les données
+                return $query->fetch(PDO::FETCH_ASSOC); 
             
         }        
         

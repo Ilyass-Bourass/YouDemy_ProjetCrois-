@@ -4,23 +4,32 @@ session_start();
 require_once '../../config/dataBase.php';
 require_once '../../classes/CourVideo.php';
 require_once '../../classes/CourDocument.php';
+require_once '../../classes/Etudiant.php';
 
 if (!isset($_SESSION['is_login']) || $_SESSION['role'] !== 'ETUDIANT') {
     header('Location: ../../pages/login.php');
     exit();
 }
 
+var_dump($_SESSION);
 $db = new Database();
 $connex = $db->getConnection();
 
 $newCourdocument=new CourDocument($connex,1,"","","",1,50);
-$courDocument=$newCourdocument->afficherCour(2);
-var_dump($courDocument);
+//$courDocument=$newCourdocument->afficherCour(2);
+
+
 echo '</br>';
 $newCourVideo=new CourVideo($connex,1,"","","",1,50);
-$courVideo=$newCourVideo->afficherCour(4);
+//$courVideo=$newCourVideo->afficherCour(4);
 
-var_dump("contentvideo",$courVideo);
+//var_dump("contentvideo",$courVideo);
+
+$id_etudaint=$_SESSION['user_id'];
+
+$newEtudiant=new Etudiant($connex);
+$coursEtudiant=$newEtudiant->getAllcourEtudiant($id_etudaint);
+//var_dump($coursEtudiant);
 ?>
 
 <!DOCTYPE html>
@@ -72,25 +81,27 @@ var_dump("contentvideo",$courVideo);
                                 <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Enseignant</th>
                                 <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Date d'inscription</th>
                                 <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Progression</th>
-                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Actions</th>
+                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Content</th>
                             </tr>
                         </thead>
                         <tbody class="bg-white divide-y divide-gray-200">
-                            <tr>
-                                <td class="px-6 py-4 whitespace-nowrap">PHP Avancé</td>
-                                <td class="px-6 py-4 whitespace-nowrap">Jean Dupont</td>
-                                <td class="px-6 py-4 whitespace-nowrap">01/03/2024</td>
-                                <td class="px-6 py-4 whitespace-nowrap">
-                                    <div class="w-full bg-gray-200 rounded-full h-2.5">
-                                        <div class="bg-emerald-600 h-2.5 rounded-full" style="width: 75%"></div>
-                                    </div>
-                                </td>
-                                <td class="px-6 py-4 whitespace-nowrap">
-                                    <button class="bg-emerald-500 text-white px-4 py-2 rounded hover:bg-emerald-600">
-                                        Continuer
-                                    </button>
-                                </td>
-                            </tr>
+                            <?php foreach($coursEtudiant as $courEtudiant):?>
+                                <tr>
+                                    <td class="px-6 py-4 whitespace-nowrap"><?= $courEtudiant['titre']?></td>
+                                    <td class="px-6 py-4 whitespace-nowrap"><?= $courEtudiant['nameEnseignant']?></td>
+                                    <td class="px-6 py-4 whitespace-nowrap"><?= $courEtudiant['date_inscription']?></td>
+                                    <td class="px-6 py-4 whitespace-nowrap">
+                                        <div class="w-full bg-gray-200 rounded-full h-2.5">
+                                            <div class="bg-emerald-600 h-2.5 rounded-full" style="width: 75%"></div>
+                                        </div>
+                                    </td>
+                                    <td class="px-6 py-4 whitespace-nowrap">
+                                        <button class="bg-emerald-500 text-white px-4 py-2 rounded hover:bg-emerald-600">
+                                            Voir-Cour
+                                        </button>
+                                    </td>
+                                </tr>
+                            <?php endforeach;?>
                         </tbody>
                     </table>
                 </div>
