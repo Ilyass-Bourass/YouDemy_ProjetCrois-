@@ -1,10 +1,23 @@
 <?php
     require_once 'config/dataBase.php';
     require_once 'classes/Cour.php';
+    require_once 'classes/courTags.php';
+
     session_start();
 
+    if (!isset($_GET['page'])) {
+        header('Location: index.php?page=1');
+        exit();
+    }
 
-    $pageActuel=$_GET['page'];
+
+    if(isset($_GET['page'])){
+        $pageActuel=$_GET['page'];
+    }
+    else{
+        $pageActuel=1;
+    }
+    
     $db=new Database();
     $conn=$db->getConnection();
 
@@ -17,6 +30,9 @@
 
     $cours= $newCour->afficherTousLesCours($nombreOfsset);
 
+    $newCourTag=new CourTag($conn);
+
+    //var_dump($newCourTag->getALLtagsCour(10));
     
 
     //var_dump($nombrePages);
@@ -138,18 +154,20 @@
                     <div class="flex justify-between items-center  mb-2">
                         <div class="flex items-center">
                             <img src="https://placehold.co/32x32" alt="Avatar" class="w-8 h-8 rounded-full mr-2">
-                            <span class="text-gray-700"><?php echo $cour['id_enseignant']?></span>
+                            <span class="text-gray-700"><?php echo $cour['name']?></span>
                         </div>
                         
-                        <span class="text-blue-600 text-sm font-semibold"><?php echo $cour['id_categorie']?></span>
+                        <span class="text-blue-600 text-sm font-semibold"><?php echo $cour['name_categorie']?></span>
                     </div>
                     
                     <h3 class="text-xl font-bold text-gray-800 mt-2"><?php echo $cour['titre']?></h3>
                     <p class="text-gray-600 mt-2"><?php echo $cour['description']?></p>
                     <div class="flex flex-wrap gap-2 mt-3">
-                        <span class="bg-gray-100 text-gray-700 px-2 py-1 rounded-full text-sm">#html</span>
-                        <span class="bg-gray-100 text-gray-700 px-2 py-1 rounded-full text-sm">#css</span>
-                        <span class="bg-gray-100 text-gray-700 px-2 py-1 rounded-full text-sm">#javascript</span>
+                        <?php $tags=$newCourTag->getALLtagsCour($cour['id_cour']);
+                            foreach($tags as $tag):
+                        ?>
+                            <span class="bg-gray-100 text-gray-700 px-2 py-1 rounded-full text-sm">#<?= $tag['tag_name']?></span>
+                        <?php endforeach;?>
                     </div>
                     <div class="mt-4 flex items-center justify-between">
                         <span class="text-gray-800 font-bold"><?php echo $cour['prix']?></span>

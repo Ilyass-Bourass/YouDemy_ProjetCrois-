@@ -3,14 +3,14 @@
 require_once 'CourTags.php';
 
     class Cour {
-        private $id_cour;
-        private $id_enseignant;
-        private $titre;
-        private $description;
-        private $img_url;
-        private $id_categorie;
-        private $prix;
-        private $conn;
+        protected $id_cour;
+        protected $id_enseignant;
+        protected $titre;
+        protected $description;
+        protected $img_url;
+        protected $id_categorie;
+        protected $prix;
+        protected $conn;
 
 
         public function __construct($db,$id_enseignant,$titre,$description,$img_url,$id_categorie,$prix){
@@ -23,32 +23,12 @@ require_once 'CourTags.php';
             $this->prix=$prix;
         }
 
-        public function ajouterCour($id_tags){
-            try {
-                $sql="INSERT INTO cours(id_enseignant,titre,description,img_url,id_categorie,prix)
-                VALUES (:id_enseignant,:titre,:description,:img_url,:id_categorie,:prix)";
-                $query=$this->conn->prepare($sql);
-                $result = $query->execute([
-                    ":id_enseignant"=>$this->id_enseignant,
-                    ":titre"=>$this->titre,
-                    ":description"=>$this->description,
-                    ":img_url"=>$this->img_url,
-                    ":id_categorie"=>$this->id_categorie,
-                    ":prix"=>$this->prix,
-                ]);
-                $id_cour = $this->conn->lastInsertId();
-                $courtag=new CourTag($this->conn);
+        public function ajouterCour($id_tags,$content){
+    
+        }
 
-                foreach($id_tags as $id_tag){
-                    if(!$courtag->ajoutertagCour($id_cour,$id_tag)){
-                        echo "Problem d ajout des tags";
-                        exit();
-                    }
-                }
-                return $result;
-            } catch(PDOException $e) {
-                return false;
-            }
+        public function afficherCour($id_cour){
+            
         }
 
         public  function afficherTousLesCours($pageOffset) {
@@ -67,5 +47,13 @@ require_once 'CourTags.php';
             return $query->rowCount();
         }
 
+        public function deleteCour($id_cour){
+            $sql="DELETE from cours where id_cour=:id_cour";
+            $query=$this->conn->prepare($sql);
+            $query->execute([
+                ":id_cour"=>$id_cour
+            ]);
+            return true;
+        }
     }
 ?>
