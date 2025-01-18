@@ -27,6 +27,9 @@ if (!isset($_SESSION['is_login']) || $_SESSION['role'] !== 'ADMIN') {
     $newTag=new Tag($connex);
     $Tags=$newTag->getALLtags();
 
+    $ALLcours=$admin->getAllCoursAdmin();
+    var_dump($ALLcours);
+
     //var_dump($Tags);
 
 ?>
@@ -233,19 +236,22 @@ if (!isset($_SESSION['is_login']) || $_SESSION['role'] !== 'ADMIN') {
                             </tr>
                         </thead>
                         <tbody class="bg-white divide-y divide-gray-200">
-                            <tr>
-                                <td class="px-6 py-4 whitespace-nowrap">Introduction PHP</td>
-                                <td class="px-6 py-4 whitespace-nowrap">Jean Dupont</td>
-                                <td class="px-6 py-4 whitespace-nowrap">Développement Web</td>
-                                <td class="px-6 py-4 whitespace-nowrap space-x-2">
-                                    <button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-1 px-3 rounded">
-                                        ✏️ Modifier
-                                    </button>
-                                    <button class="bg-red-500 hover:bg-red-700 text-white font-bold py-1 px-3 rounded">
-                                        🗑️ Supprimer
-                                    </button>
-                                </td>
-                            </tr>
+                            <?php foreach($ALLcours as $cour):?>
+                                <tr>
+                                    <td class="px-6 py-4 whitespace-nowrap"><?= $cour['titre']?></td>
+                                    <td class="px-6 py-4 whitespace-nowrap"><?= $cour['name']?></td>
+                                    <td class="px-6 py-4 whitespace-nowrap"><?= $cour['name_categorie']?></td>
+                                    <td class="px-6 py-4 whitespace-nowrap space-x-2">
+                                        <button onclick="window.location.href='../modifier_cours.php?id_cour=<?= $cour['id_cour']?>'" 
+                                        class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-1 px-3 rounded">
+                                            ✏️ Modifier
+                                        </button>
+                                        <button class="bg-red-500 hover:bg-red-700 text-white font-bold py-1 px-3 rounded">
+                                            🗑️ Supprimer
+                                        </button>
+                                    </td>
+                                </tr>
+                            <?php endforeach;?>
                         </tbody>
                     </table>
                 </div>

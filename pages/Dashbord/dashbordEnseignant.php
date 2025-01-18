@@ -205,11 +205,13 @@ $coursEnseignant=$newEnseignant->getMesCours($_SESSION['user_id']);
                                         <td class="px-6 py-4 whitespace-nowrap"><?= $courEnseignant['name_categorie']?></td>
                                         <td class="px-6 py-4 whitespace-nowrap">25</td>
                                         <td class="px-6 py-4 whitespace-nowrap space-x-2">
+                                            
+                                            <button  onclick="window.location.href='../modifier_cours.php?id_cour=<?= $courEnseignant['id_cour']?>'" 
+                                                class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-1 px-3 rounded">
+                                                ✏️ Modifier
+                                            </button>
                                             <form method="POST" action="../../actions/deleteCour.php">
-                                                <button name='modifierCour' value="<?= $courEnseignant['id_cour']?>" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-1 px-3 rounded">
-                                                    ✏️ Modifier
-                                                </button>
-                                                <button name='deleteCour' value="<?= $courEnseignant['id_cour']?>" class="bg-red-500 hover:bg-red-700 text-white font-bold py-1 px-3 rounded">
+                                            <button name='deleteCour' value="<?= $courEnseignant['id_cour']?>" class="bg-red-500 hover:bg-red-700 text-white font-bold py-1 px-3 rounded">
                                                     🗑️ Supprimer
                                                 </button>
                                             </form>
@@ -254,6 +256,108 @@ $coursEnseignant=$newEnseignant->getMesCours($_SESSION['user_id']);
         </div>
     </div>
 
+    <!-- Modal Modifier Cours -->
+    <div id="modal-modifier-cours" class="hidden fixed inset-0 bg-gray-600 bg-opacity-50 overflow-y-auto h-full w-full">
+        <div class="relative top-20 mx-auto p-5 border w-4/5 shadow-lg rounded-md bg-white">
+            <div class="flex justify-between items-center mb-4">
+                <h3 class="text-xl font-bold">Modifier le cours</h3>
+                <button onclick="closeModal()" class="text-gray-600 hover:text-gray-800">&times;</button>
+            </div>
+            
+            <form class="space-y-4" action="../../actions/modifier_course.php" method="POST">
+                <input type="hidden" name="id_cour" id="edit_id_cour">
+                
+                <!-- Titre -->
+                <div>
+                    <label class="block text-sm font-medium text-gray-700">Titre du cours</label>
+                    <input type="text" name="titre" id="edit_titre" required 
+                        class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500">
+                </div>
+
+                <!-- Description -->
+                <div>
+                    <label class="block text-sm font-medium text-gray-700">Description</label>
+                    <textarea name="description" id="edit_description" rows="4" required 
+                        class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"></textarea>
+                </div>
+
+                <!-- Prix -->
+                <div>
+                    <label class="block text-sm font-medium text-gray-700">Prix du cours (€)</label>
+                    <input type="number" name="prix" id="edit_prix" step="0.01" min="0" required 
+                        class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500">
+                </div>
+
+                <!-- Image URL -->
+                <div>
+                    <label class="block text-sm font-medium text-gray-700">Image de présentation</label>
+                    <input type="url" name="img_url" id="edit_img_url" required 
+                        class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500">
+                </div>
+
+                <!-- Catégorie -->
+                <div>
+                    <label class="block text-sm font-medium text-gray-700">Catégorie</label>
+                    <select name="id_categorie" id="edit_categorie" required 
+                        class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500">
+                        <?php foreach($categories as $categorie):?>
+                            <option value="<?= $categorie['id_categorie']?>"><?= $categorie['name_categorie']?></option>
+                        <?php endforeach;?>
+                    </select>
+                </div>
+
+                <!-- Tags -->
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-2">Tags</label>
+                    <div class="flex space-x-4">
+                        <?php foreach($Tags as $tag):?>
+                            <label class="inline-flex items-center">
+                                <input type="checkbox" name="tags[]" value="<?= $tag['id_tag']?>" class="form-checkbox">
+                                <span class="ml-2"><?= $tag['tag_name']?></span>
+                            </label>
+                        <?php endforeach;?>
+                    </div>
+                </div>
+
+                <!-- Type de contenu -->
+                <div>
+                    <label class="block text-sm font-medium text-gray-700">Type de contenu</label>
+                    <select name="content_type" id="edit_content_type" 
+                        class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500">
+                        <option value="">Sélectionnez le type</option>
+                        <option value="video">Vidéo</option>
+                        <option value="document">Document</option>
+                    </select>
+                </div>
+
+                <!-- Contenu Vidéo -->
+                <div id="edit_videoContent" class="hidden">
+                    <label class="block text-sm font-medium text-gray-700">URL de la vidéo</label>
+                    <input type="url" name="video_url" id="edit_video_url"
+                        class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500">
+                </div>
+
+                <!-- Contenu Document -->
+                <div id="edit_documentContent" class="hidden">
+                    <label class="block text-sm font-medium text-gray-700">Contenu du document</label>
+                    <textarea name="document_content" id="edit_document_content" rows="4" 
+                        class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"></textarea>
+                </div>
+
+                <div class="flex justify-end space-x-3">
+                    <button type="button" onclick="closeModal()" 
+                        class="px-4 py-2 bg-gray-300 text-gray-700 rounded-md hover:bg-gray-400">
+                        Annuler
+                    </button>
+                    <button type="submit" 
+                        class="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700">
+                        Enregistrer les modifications
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
     <script>
         document.addEventListener('DOMContentLoaded', function() {
 
@@ -295,6 +399,43 @@ $coursEnseignant=$newEnseignant->getMesCours($_SESSION['user_id']);
             } else {
                 videoContent.classList.add('hidden');
                 documentContent.classList.add('hidden');
+            }
+        });
+
+        function openModal(courId) {
+            document.getElementById('modal-modifier-cours').classList.remove('hidden');
+            document.getElementById('edit_id_cour').value = courId;
+            
+            // Ici vous pourrez ajouter le code pour pré-remplir le formulaire
+            // avec les données du cours sélectionné
+        }
+
+        function closeModal() {
+            document.getElementById('modal-modifier-cours').classList.add('hidden');
+        }
+
+        // Gestionnaire pour le type de contenu dans le formulaire de modification
+        document.getElementById('edit_content_type').addEventListener('change', function() {
+            const videoContent = document.getElementById('edit_videoContent');
+            const documentContent = document.getElementById('edit_documentContent');
+            
+            if (this.value === 'video') {
+                videoContent.classList.remove('hidden');
+                documentContent.classList.add('hidden');
+            } else if (this.value === 'document') {
+                documentContent.classList.remove('hidden');
+                videoContent.classList.add('hidden');
+            } else {
+                videoContent.classList.add('hidden');
+                documentContent.classList.add('hidden');
+            }
+        });
+
+        
+        document.querySelectorAll('button[name="modifierCour"]').forEach(button => {
+            button.onclick = function(e) {
+                e.preventDefault();
+                openModal(this.value);
             }
         });
     </script>

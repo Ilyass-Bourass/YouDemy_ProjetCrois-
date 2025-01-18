@@ -97,7 +97,11 @@
                     <p class="text-xl mb-8">Découvrez des milliers de cours enseignés par des experts.</p>
                     <div class="flex space-x-4">
                         <a href="#Cours" class="bg-white text-blue-600 px-6 py-3 rounded-md hover:bg-gray-100">Voir les cours</a>
-                        <a href="/register.php" class="border-2 border-white text-white px-6 py-3 rounded-md hover:bg-white hover:text-blue-600">Commencer</a>
+                        <?php if(isset($_SESSION['is_login']) && $_SESSION['role']=="ETUDIANT"):?>
+                            <a href="pages/Dashbord/dashbordEtudaint.php" class="border-2 border-white text-white px-6 py-3 rounded-md hover:bg-white hover:text-blue-600">Commencer</a>
+                        <?php else:?>
+                            <a href="pages/register.php" class="border-2 border-white text-white px-6 py-3 rounded-md hover:bg-white hover:text-blue-600">Commencer</a>
+                        <?php endif;?>
                     </div>
                 </div>
                 <div class="hidden md:block">

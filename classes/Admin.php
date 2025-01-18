@@ -45,6 +45,14 @@
             return true;
         }
 
+        public function getAllCoursAdmin(){
+            $sql="SELECT c.*,cat.name_categorie,u.name from cours c join users u on u.id_user=c.id_enseignant 
+                    join categories cat on c.id_categorie=cat.id_categorie;";
+            $query=$this->connexion->prepare($sql);
+            $query->execute();
+            return $query->fetchALL(PDO::FETCH_ASSOC);
+        }
+
 
     }
 ?>

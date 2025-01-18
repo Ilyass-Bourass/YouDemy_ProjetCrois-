@@ -11,7 +11,7 @@ if (!isset($_SESSION['is_login']) || $_SESSION['role'] !== 'ETUDIANT') {
     exit();
 }
 
-var_dump($_SESSION);
+//var_dump($_SESSION);
 $db = new Database();
 $connex = $db->getConnection();
 
@@ -29,7 +29,7 @@ $id_etudaint=$_SESSION['user_id'];
 
 $newEtudiant=new Etudiant($connex);
 $coursEtudiant=$newEtudiant->getAllcourEtudiant($id_etudaint);
-//var_dump($coursEtudiant);
+var_dump($coursEtudiant);
 ?>
 
 <!DOCTYPE html>
@@ -80,7 +80,7 @@ $coursEtudiant=$newEtudiant->getAllcourEtudiant($id_etudaint);
                                 <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Titre du cours</th>
                                 <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Enseignant</th>
                                 <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Date d'inscription</th>
-                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Progression</th>
+                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Type-Document</th>
                                 <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Content</th>
                             </tr>
                         </thead>
@@ -90,11 +90,8 @@ $coursEtudiant=$newEtudiant->getAllcourEtudiant($id_etudaint);
                                     <td class="px-6 py-4 whitespace-nowrap"><?= $courEtudiant['titre']?></td>
                                     <td class="px-6 py-4 whitespace-nowrap"><?= $courEtudiant['nameEnseignant']?></td>
                                     <td class="px-6 py-4 whitespace-nowrap"><?= $courEtudiant['date_inscription']?></td>
-                                    <td class="px-6 py-4 whitespace-nowrap">
-                                        <div class="w-full bg-gray-200 rounded-full h-2.5">
-                                            <div class="bg-emerald-600 h-2.5 rounded-full" style="width: 75%"></div>
-                                        </div>
-                                    </td>
+                                    <td class="px-6 py-4 whitespace-nowrap"><?= $courEtudiant['cour_type']?></td>
+                                    
                                     <td class="px-6 py-4 whitespace-nowrap">
                                         <button class="bg-emerald-500 text-white px-4 py-2 rounded hover:bg-emerald-600">
                                             Voir-Cour
