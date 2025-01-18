@@ -125,6 +125,19 @@ require_once 'CourTags.php';
 
         }
 
+        public function rechercheCour($titre) {
+            $sql = "SELECT c.*, u.name, categories.name_categorie 
+                    FROM cours c 
+                    INNER JOIN users u ON c.id_enseignant = u.id_user 
+                    INNER JOIN categories ON c.id_categorie = categories.id_categorie 
+                    WHERE c.titre LIKE :titre";
+            $query = $this->conn->prepare($sql);
+            $query->execute([
+                ":titre" => '%' . $titre . '%'
+            ]);
+            return $query->fetchAll(PDO::FETCH_ASSOC);
+        }
+
        
     }
 ?>

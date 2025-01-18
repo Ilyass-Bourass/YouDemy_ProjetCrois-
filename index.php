@@ -5,6 +5,11 @@
     require_once 'classes/courTags.php';
 
     session_start();
+    
+
+    $db=new Database();
+    $conn=$db->getConnection();
+
     //var_dump($_SESSION);
     if (!isset($_GET['page'])) {
         header('Location: index.php?page=1');
@@ -21,10 +26,16 @@
     if(isset($_SESSION['user_id'])){
         $id_etudiant=$_SESSION['user_id'];
     }
+
+    if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['recherche_titre'])){
+        $titre_rechercher=$_POST['recherche_titre'];
+        //var_dump($titre_rechercher);
+        $newCour=new Cour($conn,2,"","","",2,50);
+        $CoursRecherche=$newCour->rechercheCour($titre_rechercher);
+    }
     
     
-    $db=new Database();
-    $conn=$db->getConnection();
+    
 
     $admin = new Admin($conn);
 
@@ -56,7 +67,7 @@
     <script src="https://cdn.tailwindcss.com"></script>
 </head>
 <body class="bg-gray-50">
-    <!-- Navigation -->
+   
     <nav class="bg-white shadow-lg">
         <div class="max-w-7xl mx-auto px-4">
             <div class="flex justify-between items-center h-16">
@@ -64,7 +75,7 @@
                     <a href="index.php" class="text-2xl font-bold text-blue-600">Youdemy</a>
                 </div>
                 
-                <!-- Ajout du nom de l'étudiant au milieu -->
+             
                 <?php if(isset($_SESSION['is_login']) && $_SESSION['role']=="ETUDIANT"): ?>
                 <div class="flex items-center bg-gradient-to-r from-blue-50 to-indigo-50 px-6 py-2 rounded-full border border-blue-200 shadow-sm">
                     <div class="flex items-center space-x-2">
@@ -95,7 +106,7 @@
         </div>
     </nav>
 
-    <!-- Hero Section -->
+
     <div class="bg-gradient-to-r from-blue-600 to-blue-800 text-white">
         <div class="max-w-7xl mx-auto px-4 py-20">
             <div class="grid grid-cols-1 md:grid-cols-2 gap-8 items-center">
@@ -118,13 +129,13 @@
         </div>
     </div>
 
-    <!-- Barre de recherche -->
+
     <div class="max-w-7xl mx-auto px-4 py-8">
         <div class="flex justify-center">
             <div class="w-full max-w-2xl">
-                <form class="flex gap-2">
-                    <input type="text" placeholder="Rechercher un cours..." class="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-600">
-                    <button type="submit" class="bg-blue-600 text-white px-6 py-2 rounded-md hover:bg-blue-700">
+                <form method="POST"  class="flex gap-2">
+                    <input name="recherche_titre" type="text" placeholder="Rechercher un cours..." class="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-600">
+                    <button onclick="window.location.hash = '#recherche';" type="submit" class="bg-blue-600 text-white px-6 py-2 rounded-md hover:bg-blue-700">
                         Rechercher
                     </button>
                 </form>
@@ -132,32 +143,84 @@
         </div>
     </div>
 
-    <!-- Filtres de recherche avancée -->
+    <div id="recherche" class="max-w-7xl mx-auto px-4 py-12">
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+            <?php if(!empty($CoursRecherche)):?>
+                <?php foreach($CoursRecherche as $courRecherche): ?>
+                    <div class="bg-white rounded-lg shadow-md overflow-hidden">
+                        <img src="<?php echo $courRecherche['img_url']?>" alt="Photo_Cour" class="w-full h-48 object-cover">
+                        <div class="p-6">
+                            <div class="flex justify-between items-center  mb-2">
+                                <div class="flex items-center">
+                                    <img src="https://placehold.co/32x32" alt="Avatar" class="w-8 h-8 rounded-full mr-2">
+                                    <span class="text-gray-700"><?php echo $courRecherche['name']?></span>
+                                </div>
+                                
+                                <span class="text-blue-600 text-sm font-semibold"><?php echo $courRecherche['name_categorie']?></span>
+                            </div>
+                            
+                            <h3 class="text-xl font-bold text-gray-800 mt-2"><?php echo $courRecherche['titre']?></h3>
+                            <p class="text-gray-600 mt-2"><?php echo $courRecherche['description']?></p>
+                            <div class="flex flex-wrap gap-2 mt-3">
+                                <?php $tags=$newCourTag->getALLtagsCour($courRecherche['id_cour']);
+                                    foreach($tags as $tag):
+                                ?>
+                                    <span class="bg-gray-100 text-gray-700 px-2 py-1 rounded-full text-sm">#<?= $tag['tag_name']?></span>
+                                <?php endforeach;?>
+                            </div>
+                            <div class="mt-4 flex items-center justify-between">
+                                <span class="text-gray-800 font-bold"><?php echo $courRecherche['prix']?></span>
+                                <span class="text-sm text-gray-600">⭐ 4.8 (128 avis)</span>
+                            </div>
+                            <?php if(isset($_SESSION['is_login']) && $_SESSION['role']=="ETUDIANT"):?>
+                                <?php if(!$admin->isBan($id_etudiant)):?>
+                                    <a href="actions/inscriptionCour.php?id_user=<?= $_SESSION['user_id'] ?>
+                                                                        &id_cour=<?php echo $courRecherche['id_cour'] ?>
+                                                                        &id_enseignant=<?= $courRecherche['id_enseignant']?>"
+                                    class="mt-4 block text-center bg-blue-600 text-white py-2 px-4 rounded-md hover:bg-blue-700">
+                                        inscris-cour
+                                    </a>
+                                    <?php else:?>
+                                        <a href="pages/Dashbord/dashbordEtudaint.php"
+                                    class="mt-4 block text-center bg-red-600 text-white py-2 px-4 rounded-md hover:bg-blue-700">
+                                    Vous-êtes-banni
+                                    </a>
+                                <?php endif?>
+                            <?php else:?>
+                                <a href="pages/register.php" class="mt-4 block text-center bg-blue-600 text-white py-2 px-4 rounded-md hover:bg-blue-700">inscris-cour</a>
+                            <?php endif;?>
+                        </div>
+                    </div>
+                <?php endforeach; ?>
+            <?php elseif($_SERVER['REQUEST_METHOD'] === 'POST' && empty($CoursRecherche)) :?>
+                <p class="font-bold text-red-500 text-center">Aucune recherche trouvée</p>
+            <?php endif;?>
+            
+        </div>
+    </div>
+
     <div class="max-w-7xl mx-auto px-4 mb-8">
         <div class="bg-white p-4 rounded-md shadow">
             <h3 class="text-lg font-semibold mb-4">Recherche avancée</h3>
             <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
                 <select class="border rounded-md p-2">
                     <option value="">Catégorie</option>
-                    <!-- Options à remplir dynamiquement -->
                 </select>
                 <select class="border rounded-md p-2">
                     <option value="">Tags</option>
-                    <!-- Options à remplir dynamiquement -->
                 </select>
                 <select class="border rounded-md p-2">
                     <option value="">Auteur</option>
-                    <!-- Options à remplir dynamiquement -->
                 </select>
             </div>
         </div>
     </div>
 
-    <!-- Section des cours populaires -->
+
     <div id="Cours" class="max-w-7xl mx-auto px-4 py-12">
         <h2 class="text-3xl font-bold text-gray-800 mb-8">Cours populaires</h2>
         <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-            <!-- Carte de cours 1 -->
+
              <?php foreach($cours as $cour): ?>
             <div class="bg-white rounded-lg shadow-md overflow-hidden">
                 <img src="<?php echo $cour['img_url']?>" alt="Photo_Cour" class="w-full h-48 object-cover">
@@ -207,7 +270,7 @@
             
         </div>
 
-        <!-- Pagination -->
+
         <div class="flex justify-center items-center space-x-2 mt-12">
 
             <a href="index.php?page=<?php echo ($_GET['page'] == 1) ? "1" : $_GET['page'] - 1; ?>"
