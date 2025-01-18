@@ -53,6 +53,14 @@
             return $query->fetchALL(PDO::FETCH_ASSOC);
         }
 
-
+        public function isBan($id_user){
+            $sql="SELECT * from users where id_user=:id_user";
+            $query=$this->connexion->prepare($sql);
+            $query->execute([
+                "id_user"=>$id_user
+            ]);
+            $result=$query->fetch(PDO::FETCH_ASSOC);
+            return $result['status']==='suspendu';
+        }
     }
 ?>

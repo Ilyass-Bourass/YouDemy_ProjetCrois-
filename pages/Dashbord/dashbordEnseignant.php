@@ -4,6 +4,7 @@ require_once '../../config/dataBase.php';
 require_once '../../classes/Categorie.php';
 require_once '../../classes/Tag.php';
 require_once '../../classes/Enseignant.php';
+require_once '../../classes/Admin.php';
 
 session_start();
 
@@ -11,6 +12,9 @@ if (!isset($_SESSION['is_login']) || $_SESSION['role'] !== 'ENSEIGNANT') {
     header('Location: ../../pages/login.php');
     exit();
 }
+
+$id_enseignant=$_SESSION['user_id'];
+
 
 $db = new Database();
 $connex = $db->getConnection();
@@ -27,6 +31,8 @@ $Tags=$newTag->getALLtags();
 
 $newEnseignant=new Enseignant($connex);
 $coursEnseignant=$newEnseignant->getMesCours($_SESSION['user_id']);
+
+$admin = new Admin($connex);
 
  var_dump($coursEnseignant);
 
@@ -97,6 +103,7 @@ $coursEnseignant=$newEnseignant->getMesCours($_SESSION['user_id']);
             </div>
 
             <!-- Section Nouveau Cours -->
+             <?php if(!$admin->isBan($id_enseignant)):?>
             <div id="nouveau-cours" class="dashboard-section hidden">
                 <h2 class="text-2xl font-bold mb-6">Ajouter un nouveau cours</h2>
                 <form class="bg-white p-6 rounded-lg shadow-md" action="../../actions/ajouter_course.php" method="POST">
@@ -184,6 +191,11 @@ $coursEnseignant=$newEnseignant->getMesCours($_SESSION['user_id']);
                     </button>
                 </form>
             </div>
+            <?php else:?>
+                <p class="text-red-500 font-bold">
+                    Vous êtes banni. Vous n'avez pas la possibilité d'ajouter un cours. Veuillez contacter l'administrateur.
+                </p>
+            <?php endif?>
 
             <!-- Section Mes Cours -->
             <div id="mes-cours" class="dashboard-section hidden">

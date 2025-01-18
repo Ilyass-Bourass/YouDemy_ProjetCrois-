@@ -44,11 +44,12 @@
         
         public function afficherCour($id_cour) {
             
-                $sql = "SELECT u.name, c.*, ct.content_video_url, ct.cour_type 
+                $sql = "SELECT u.name, c.*, ct.content_video_url, ct.cour_type,cat.name_categorie
                         FROM cours c 
                         INNER JOIN cours_content ct ON c.id_cour = ct.id_cour 
-                        JOIN users u ON u.id_user = c.id_enseignant 
-                        WHERE c.id_cour = :id_cour";
+                        JOIN users u ON u.id_user = c.id_enseignant
+                        join categories cat on cat.id_categorie=c.id_categorie
+                        WHERE c.id_cour =:id_cour;";
                 $query = $this->conn->prepare($sql);
                 $query->execute([
                     ":id_cour" => $id_cour

@@ -5,6 +5,7 @@ require_once '../../config/dataBase.php';
 require_once '../../classes/CourVideo.php';
 require_once '../../classes/CourDocument.php';
 require_once '../../classes/Etudiant.php';
+require_once '../../classes/Admin.php';
 
 if (!isset($_SESSION['is_login']) || $_SESSION['role'] !== 'ETUDIANT') {
     header('Location: ../../pages/login.php');
@@ -14,6 +15,10 @@ if (!isset($_SESSION['is_login']) || $_SESSION['role'] !== 'ETUDIANT') {
 //var_dump($_SESSION);
 $db = new Database();
 $connex = $db->getConnection();
+
+$id_etudiant=$_SESSION['user_id'];
+
+$admin = new Admin($connex);
 
 $newCourdocument=new CourDocument($connex,1,"","","",1,50);
 //$courDocument=$newCourdocument->afficherCour(2);
@@ -93,19 +98,30 @@ var_dump($coursEtudiant);
                                     <td class="px-6 py-4 whitespace-nowrap"><?= $courEtudiant['cour_type']?></td>
                                     
                                     <td class="px-6 py-4 whitespace-nowrap">
-                                        <button class="bg-emerald-500 text-white px-4 py-2 rounded hover:bg-emerald-600">
-                                            Voir-Cour
-                                        </button>
+                                        <?php if($courEtudiant['cour_type']==="VIDEO"):?>
+                                            <button onclick="window.location.href='../detailsVideo.php?id_cour=<?= $courEtudiant['id_cour']?>'" class="bg-emerald-500 text-white px-4 py-2 rounded hover:bg-emerald-600">
+                                                Voir-Cour
+                                            </button>
+                                        <?php else:?>
+                                            <button onclick="window.location.href='../detailsDocument.php?id_cour=<?= $courEtudiant['id_cour']?>'" class="bg-emerald-500 text-white px-4 py-2 rounded hover:bg-emerald-600">
+                                                Voir-Cour
+                                            </button>
+                                        <?php endif;?>
                                     </td>
                                 </tr>
                             <?php endforeach;?>
                         </tbody>
-                    </table>
+                    </table>   
                 </div>
+                <?php if($admin->isBan($id_etudiant)):?>
+                    <p class="text-red-500 font-bold">
+                                Vous êtes banni. Vous n'avez pas la possibilité d'ajouter un cours. Veuillez contacter l'administrateur.
+                    </p>
+                <?php endif;?>
             </div>
         </div>
     </div>
-
+   
     <script>
         document.addEventListener('DOMContentLoaded', function() {
             // Afficher la section mes cours par défaut

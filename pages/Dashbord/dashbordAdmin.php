@@ -28,7 +28,13 @@ if (!isset($_SESSION['is_login']) || $_SESSION['role'] !== 'ADMIN') {
     $Tags=$newTag->getALLtags();
 
     $ALLcours=$admin->getAllCoursAdmin();
-    var_dump($ALLcours);
+    //var_dump($ALLcours);
+
+    if($admin->isBan(5)){
+        echo "enseignnat is ban";
+    }else{
+        echo "is not ban";
+    }
 
     //var_dump($Tags);
 
@@ -205,7 +211,7 @@ if (!isset($_SESSION['is_login']) || $_SESSION['role'] !== 'ADMIN') {
                                         🔒 Suspendre
                                     </button>
                                     <?php else :?>
-                                        <button name="Activer" class="bg-yellow-500 hover:bg-yellow-700 text-white font-bold py-1 px-3 rounded">
+                                        <button name="Activer" class="bg-green-500 hover:bg-yellow-700 text-white font-bold py-1 px-3 rounded">
                                          🔓Activer
                                         </button>
                                     <?php endif?>
