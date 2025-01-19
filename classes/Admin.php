@@ -62,5 +62,47 @@
             $result=$query->fetch(PDO::FETCH_ASSOC);
             return $result['status']==='suspendu';
         }
+
+        public function getTotalEtudiant(){
+            $sql="SELECT count(*) total_Etudiant FROM youdemy.users where role='ETUDIANT'";
+            $query=$this->connexion->prepare($sql);
+            $query->execute();
+            return $query->fetch(PDO::FETCH_ASSOC);
+        }
+
+        public function getTotalEnseignant(){
+            $sql="SELECT count(*) total_Enseignant FROM youdemy.users where role='ENSEIGNANT'";
+            $query=$this->connexion->prepare($sql);
+            $query->execute();
+            return $query->fetch(PDO::FETCH_ASSOC);
+        }
+
+        public function getTotalCours(){
+            $sql="SELECT count(*) total_Cours from cours";
+            $query=$this->connexion->prepare($sql);
+            $query->execute();
+            return $query->fetch(PDO::FETCH_ASSOC);
+        }
+
+        public function getCourPopulaire(){
+            $sql="SELECT i.id_cour,COUNT(*) AS nombreInscription,u.name AS enseignant,c.titre AS titre_cours FROM inscriptions_cours i
+                    JOIN cours c ON c.id_cour = i.id_cour
+                    JOIN users u ON u.id_user = i.id_enseignant
+                    GROUP BY i.id_cour
+                    ORDER BY nombreInscription DESC limit 1;";
+            $query=$this->connexion->prepare($sql);
+            $query->execute();
+            return $query->fetch(PDO::FETCH_ASSOC);
+        }
+
+        public function getTopTroisEnseignant(){
+            $sql="SELECT i.id_enseignant,u.name,count(i.id_etudiant) as nombreEtudiant FROM youdemy.inscriptions_cours i 
+                            join users u  on u.id_user=i.id_enseignant 
+                            group by i.id_enseignant 
+                            order by nombreEtudiant desc limit 3";
+            $query=$this->connexion->prepare($sql);
+            $query->execute();
+            return $query->fetchALL(PDO::FETCH_ASSOC);
+        }
     }
 ?>

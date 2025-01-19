@@ -2,6 +2,7 @@
 
 require_once '../../config/dataBase.php';
 require_once '../../classes/Admin.php';
+require_once '../../classes/Enseignant.php';
 require_once '../../classes/Categorie.php';
 require_once '../../classes/Tag.php';
 
@@ -14,7 +15,9 @@ if (!isset($_SESSION['is_login']) || $_SESSION['role'] !== 'ADMIN') {
 
     $db = new Database();
     $connex = $db->getConnection();
+
     $admin = new Admin($connex);
+    $Enseignant=new Enseignant($connex);
 
     $users=$admin->getAllUsers();
 
@@ -31,12 +34,22 @@ if (!isset($_SESSION['is_login']) || $_SESSION['role'] !== 'ADMIN') {
     //var_dump($ALLcours);
 
     if($admin->isBan(5)){
-        echo "enseignnat is ban";
+       // echo "enseignnat is ban";
     }else{
-        echo "is not ban";
+        //echo "is not ban";
     }
 
-    //var_dump($Tags);
+    $TotalEtudiant=$admin->getTotalEtudiant()['total_Etudiant'];
+    $totalEnseigant=$admin->getTotalEnseignant()['total_Enseignant'];
+    $totalUtilsateur=$totalEnseigant+$TotalEtudiant;
+    $totalCours=$admin->getTotalCours()['total_Cours'];
+
+    $CourPlusPopulaire=$admin->getCourPopulaire();
+
+    $topTroisEnseignnat=$admin->getTopTroisEnseignant();
+
+    
+     //var_dump($topTroisEnseignnat[0]['id_enseignant']);
 
 ?>
 
@@ -50,7 +63,7 @@ if (!isset($_SESSION['is_login']) || $_SESSION['role'] !== 'ADMIN') {
 </head>
 <body class="bg-gray-50">
     <div class="min-h-screen flex">
-        <!-- Sidebar -->
+
         <div class="w-64 bg-indigo-900 text-white flex flex-col">
             <div class="p-4 flex-grow">
                 <div class="text-2xl font-bold mb-4 text-indigo-300">Youdemy</div>
@@ -73,7 +86,7 @@ if (!isset($_SESSION['is_login']) || $_SESSION['role'] !== 'ADMIN') {
                     </a>
                 </nav>
             </div>
-            <!-- Section utilisateur et déconnexion en bas -->
+
             <div class="p-4 border-t border-indigo-800">
                 <div class="flex items-center mb-4">
                     <span class="text-gray-300">👤 <?php echo htmlspecialchars($_SESSION['name']); ?></span>
@@ -84,64 +97,63 @@ if (!isset($_SESSION['is_login']) || $_SESSION['role'] !== 'ADMIN') {
             </div>
         </div>
 
-        <!-- Contenu principal -->
+
         <div class="flex-1 p-8">
-            <!-- Section Statistiques -->
+
             <div id="statistiques" class="dashboard-section">
                 <h2 class="text-2xl font-bold mb-6">Statistiques Globales</h2>
                 <div class="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
                     <div class="bg-white p-6 rounded-lg shadow-md">
                         <h3 class="text-lg font-semibold text-gray-700">Total Cours</h3>
-                        <p class="text-3xl font-bold text-blue-600">150</p>
+                        <p class="text-3xl font-bold text-blue-600"><?= $totalCours?></p>
                     </div>
                     <div class="bg-white p-6 rounded-lg shadow-md">
                         <h3 class="text-lg font-semibold text-gray-700">Total Utilisateurs</h3>
-                        <p class="text-3xl font-bold text-green-600">1200</p>
+                        <p class="text-3xl font-bold text-green-600"><?= $totalUtilsateur?></p>
                     </div>
                     <div class="bg-white p-6 rounded-lg shadow-md">
                         <h3 class="text-lg font-semibold text-gray-700">Total Enseignants</h3>
-                        <p class="text-3xl font-bold text-purple-600">45</p>
+                        <p class="text-3xl font-bold text-purple-600"><?= $totalEnseigant?></p>
                     </div>
                     <div class="bg-white p-6 rounded-lg shadow-md">
                         <h3 class="text-lg font-semibold text-gray-700">Total Étudiants</h3>
-                        <p class="text-3xl font-bold text-yellow-600">1155</p>
+                        <p class="text-3xl font-bold text-yellow-600"><?= $TotalEtudiant?></p>
                     </div>
                 </div>
 
-                <!-- Top 3 Enseignants -->
+
                 <div class="bg-white p-6 rounded-lg shadow-md mb-8">
                     <h3 class="text-xl font-semibold mb-4">Top 3 Enseignants</h3>
                     <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
                         <div class="border rounded-lg p-4">
-                            <div class="text-lg font-bold">🥇 Jean Dupont</div>
-                            <div class="text-gray-600">15 cours</div>
-                            <div class="text-blue-600">450 étudiants</div>
+                            <div class="text-lg font-bold">🥇 <?= $topTroisEnseignnat[0]['name']?></div>
+                            <!-- <div class="text-gray-600">5 cours</div> -->
+                            <div class="text-blue-600"><?=$topTroisEnseignnat[0]['nombreEtudiant'] ?> étudiants</div>
                         </div>
                         <div class="border rounded-lg p-4">
-                            <div class="text-lg font-bold">🥈 Marie Martin</div>
-                            <div class="text-gray-600">12 cours</div>
-                            <div class="text-blue-600">380 étudiants</div>
+                            <div class="text-lg font-bold">🥈 <?= $topTroisEnseignnat[1]['name']?></div>
+                            <!-- <div class="text-gray-600">3 cours</div> -->
+                            <div class="text-blue-600"><?=$topTroisEnseignnat[1]['nombreEtudiant'] ?>  étudiants</div>
                         </div>
                         <div class="border rounded-lg p-4">
-                            <div class="text-lg font-bold">🥉 Paul Bernard</div>
-                            <div class="text-gray-600">10 cours</div>
-                            <div class="text-blue-600">320 étudiants</div>
+                            <div class="text-lg font-bold">🥉 <?= $topTroisEnseignnat[2]['name']?></div>
+                            <!-- <div class="text-gray-600">2 cours</div> -->
+                            <div class="text-blue-600"><?=$topTroisEnseignnat[2]['nombreEtudiant'] ?> étudiants</div>
                         </div>
                     </div>
                 </div>
 
-                <!-- Cours le plus populaire -->
                 <div class="bg-white p-6 rounded-lg shadow-md">
-                    <h3 class="text-xl font-semibold mb-4">Cours le Plus Populaire</h3>
+                    <h3 class="text-xl font-semibold mb-4">Cour le Plus Populaire</h3>
                     <div class="border rounded-lg p-4">
-                        <div class="text-lg font-bold">Introduction au JavaScript</div>
-                        <div class="text-gray-600">Par Jean Dupont</div>
-                        <div class="text-blue-600">250 étudiants inscrits</div>
+                        <div class="text-lg font-bold"><?= $CourPlusPopulaire['titre_cours']?></div>
+                        <div class="text-gray-600">Par : <?= $CourPlusPopulaire['enseignant']?></div>
+                        <div class="text-blue-600"><?= $CourPlusPopulaire['nombreInscription']?> étudiants inscrits</div>
                     </div>
                 </div>
             </div>
 
-            <!-- Section Validation Enseignants -->
+
             <div id="validation-enseignants" class="dashboard-section hidden">
                 <h2 class="text-2xl font-bold mb-6">Validation des Enseignants</h2>
                 <div class="bg-white rounded-lg shadow-md overflow-hidden">
@@ -178,7 +190,7 @@ if (!isset($_SESSION['is_login']) || $_SESSION['role'] !== 'ADMIN') {
                 </div>
             </div>
 
-            <!-- Section Gestion Utilisateurs -->
+
             <div id="gestion-utilisateurs" class="dashboard-section hidden">
                 <h2 class="text-2xl font-bold mb-6">Gestion des Utilisateurs</h2>
                 <div class="bg-white rounded-lg shadow-md overflow-hidden">
@@ -228,7 +240,7 @@ if (!isset($_SESSION['is_login']) || $_SESSION['role'] !== 'ADMIN') {
                 </div>
             </div>
 
-            <!-- Section Gestion Cours -->
+
             <div id="gestion-cours" class="dashboard-section hidden">
                 <h2 class="text-2xl font-bold mb-6">Gestion des Cours</h2>
                 <div class="bg-white rounded-lg shadow-md overflow-hidden">
@@ -263,11 +275,11 @@ if (!isset($_SESSION['is_login']) || $_SESSION['role'] !== 'ADMIN') {
                 </div>
             </div>
 
-            <!-- Section Catégories & Tags -->
+
             <div id="gestion-categories" class="dashboard-section hidden">
                 <h2 class="text-2xl font-bold mb-6">Gestion des Catégories & Tags</h2>
                 
-                <!-- Gestion des catégories -->
+  
                 <div class="bg-white p-6 rounded-lg shadow-md mb-8">
                     <h3 class="text-xl font-semibold mb-4">Catégories</h3>
                     <div class="flex gap-4 mb-4">
@@ -290,7 +302,7 @@ if (!isset($_SESSION['is_login']) || $_SESSION['role'] !== 'ADMIN') {
                     </div>
                 </div>
 
-                <!-- Gestion des tags -->
+
                 <div class="bg-white p-6 rounded-lg shadow-md">
                     <h3 class="text-xl font-semibold mb-4">Tags</h3>
                     <div class="mb-4">
@@ -338,7 +350,6 @@ if (!isset($_SESSION['is_login']) || $_SESSION['role'] !== 'ADMIN') {
                 });
             });
 
-            // Afficher la section statistiques par défaut
             document.getElementById('statistiques').classList.remove('hidden');
             document.querySelector('[data-target="statistiques"]').classList.add('bg-blue-600');
         });

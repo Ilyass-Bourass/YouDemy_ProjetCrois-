@@ -273,19 +273,19 @@
 
         <div class="flex justify-center items-center space-x-2 mt-12">
 
-            <a href="index.php?page=<?php echo ($_GET['page'] == 1) ? "1" : $_GET['page'] - 1; ?>"
+            <a href="index.php?page=<?php echo ($_GET['page'] == 1) ? "1" : $_GET['page'] - 1; ?>#Cours"
                 class="px-4 py-2 border rounded-md hover:bg-blue-50">
                 Précédent
             </a>
 
             <?php for($i = 0; $i < $nombrePages; $i++): ?>
-                <a href="index.php?page=<?php echo $i + 1; ?>" 
+                <a href="index.php?page=<?php echo $i + 1; ?>#Cours" 
                     class="px-4 py-2 border rounded-md hover:bg-gray-50 <?php echo ($_GET['page'] == $i + 1) ? 'bg-blue-600 text-white' : ''; ?>">
                     <?php echo $i + 1; ?>
                 </a>
             <?php endfor; ?>
 
-            <a href="index.php?page=<?php echo ($_GET['page'] == $nombrePages) ? $nombrePages : $_GET['page'] + 1; ?>"
+            <a href="index.php?page=<?php echo ($_GET['page'] == $nombrePages) ? $nombrePages : $_GET['page'] + 1; ?>#Cours"
                 class="px-4 py-2 border rounded-md hover:bg-blue-50">
                 Suivant
             </a>
