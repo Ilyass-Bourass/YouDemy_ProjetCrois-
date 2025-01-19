@@ -129,7 +129,7 @@ var_dump($coursModifier);
                 <div>
                     <label class="block text-sm font-medium text-gray-700">Type de contenu</label>
                     <select name="content_type" id="contentType"
-                        class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500">
+                        class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500" required>
                         <option value="pas_selectionner">Sélectionnez le type</option>
                         <option value="VIDEO">Vidéo</option>
                         <option value="DOCUMENT">Document</option>

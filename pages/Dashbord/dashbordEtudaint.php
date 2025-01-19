@@ -47,7 +47,7 @@ var_dump($coursEtudiant);
 </head>
 <body class="bg-gray-50">
     <div class="min-h-screen flex">
-        <!-- Sidebar -->
+        
         <div class="w-64 bg-emerald-800 text-white flex flex-col">
             <div class="p-4 flex-grow">
                 <div class="text-2xl font-bold mb-4">Youdemy</div>
@@ -58,7 +58,7 @@ var_dump($coursEtudiant);
                     </a>
                 </nav>
             </div>
-            <!-- Section utilisateur et déconnexion -->
+            
             <div class="p-4 border-t border-emerald-700">
                 <div class="flex items-center mb-4">
                     <span class="text-gray-300">👤 <?php echo htmlspecialchars($_SESSION['name']); ?></span>
@@ -73,9 +73,9 @@ var_dump($coursEtudiant);
             </div>
         </div>
 
-        <!-- Contenu principal -->
+ 
         <div class="flex-1 p-8">
-            <!-- Section Mes Cours -->
+
             <div id="mes-cours" class="dashboard-section">
                 <h2 class="text-2xl font-bold mb-6">Mes Cours</h2>
                 <div class="bg-white rounded-lg shadow-md overflow-hidden">
@@ -124,7 +124,6 @@ var_dump($coursEtudiant);
    
     <script>
         document.addEventListener('DOMContentLoaded', function() {
-            // Afficher la section mes cours par défaut
             document.getElementById('mes-cours').classList.remove('hidden');
         });
     </script>

@@ -118,28 +118,28 @@ $admin = new Admin($connex);
             <div id="nouveau-cours" class="dashboard-section hidden">
                 <h2 class="text-2xl font-bold mb-6">Ajouter un nouveau cours</h2>
                 <form class="bg-white p-6 rounded-lg shadow-md" action="../../actions/ajouter_course.php" method="POST">
-                    <!-- Titre -->
+                    
                     <div class="mb-4">
                         <label class="block text-sm font-medium text-gray-700">Titre du cours</label>
                         <input type="text" name="titre" required 
                             class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500">
                     </div>
 
-                    <!-- Description -->
+                   
                     <div class="mb-4">
                         <label class="block text-sm font-medium text-gray-700">Description</label>
                         <textarea name="description" rows="4" required 
                             class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"></textarea>
                     </div>
 
-                    <!-- Prix -->
+                   
                     <div class="mb-4">
                         <label class="block text-sm font-medium text-gray-700">Prix du cours (€)</label>
                         <input type="number" name="prix" step="0.01" min="0" required 
                             class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500">
                     </div>
 
-                    <!-- Image URL -->
+                   
                     <div class="mb-4">
                         <label class="block text-sm font-medium text-gray-700">Image de présentation</label>
                         <input type="url" name="img_url" required 
@@ -147,7 +147,7 @@ $admin = new Admin($connex);
                             class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500">
                     </div>
 
-                    <!-- Catégorie -->
+                   
                     <div class="mb-4">
                         <label class="block text-sm font-medium text-gray-700">Catégorie</label>
                         <select name="id_categorie" required 
@@ -159,7 +159,7 @@ $admin = new Admin($connex);
                         </select>
                     </div>
 
-                    <!-- Tags -->
+                
                     <div class="mb-4">
                         <label class="block text-sm font-medium text-gray-700 mb-2">Tags</label>
                         <div class="flex space-x-4">
@@ -172,7 +172,7 @@ $admin = new Admin($connex);
                         </div>
                     </div>
 
-                    <!-- Type de contenu -->
+                
                     <div class="mb-4">
                         <label class="block text-sm font-medium text-gray-700">Type de contenu</label>
                         <select name="content_type" id="contentType" 
@@ -183,14 +183,14 @@ $admin = new Admin($connex);
                         </select>
                     </div>
 
-                    <!-- Contenu Vidéo -->
+               
                     <div id="videoContent" class="mb-4 hidden">
                         <label class="block text-sm font-medium text-gray-700">URL de la vidéo</label>
                         <input type="url" name="video_url" 
                             class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500">
                     </div>
 
-                    <!-- Contenu Document -->
+                
                     <div id="documentContent" class="mb-4 hidden">
                         <label class="block text-sm font-medium text-gray-700">Contenu du document</label>
                         <textarea name="document_content" rows="4" 
@@ -311,7 +311,7 @@ $admin = new Admin($connex);
             document.querySelector('[data-target="statistiques"]').classList.add('bg-blue-600');
         });
 
-        // Script pour gérer l'affichage des champs de contenu
+     
         document.getElementById('contentType').addEventListener('change', function() {
             const videoContent = document.getElementById('videoContent');
             const documentContent = document.getElementById('documentContent');
@@ -332,15 +332,14 @@ $admin = new Admin($connex);
             document.getElementById('modal-modifier-cours').classList.remove('hidden');
             document.getElementById('edit_id_cour').value = courId;
             
-            // Ici vous pourrez ajouter le code pour pré-remplir le formulaire
-            // avec les données du cours sélectionné
+           
         }
 
         function closeModal() {
             document.getElementById('modal-modifier-cours').classList.add('hidden');
         }
 
-        // Gestionnaire pour le type de contenu dans le formulaire de modification
+       
         document.getElementById('edit_content_type').addEventListener('change', function() {
             const videoContent = document.getElementById('edit_videoContent');
             const documentContent = document.getElementById('edit_documentContent');

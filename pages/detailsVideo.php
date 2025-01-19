@@ -40,7 +40,7 @@ if(isset($_GET['id_cour'])){
                     </a>
                 </nav>
             </div>
-            <!-- Informations du cours -->
+            
             <div class="p-4 border-t border-emerald-700">
                 <div class="mb-4">
                     <h3 class="font-bold text-lg">Informations</h3>
@@ -53,12 +53,12 @@ if(isset($_GET['id_cour'])){
             </div>
         </div>
 
-        <!-- Contenu principal -->
+       
         <div class="flex-1 p-8">
             <div class="max-w-4xl mx-auto">
                 <h1 class="text-3xl font-bold mb-6"><?= $DetailsCour['titre']?></h1>
                 
-                <!-- Lecteur vidéo -->
+                
                 <div class="mb-8">
                     <div class="aspect-w-16 aspect-h-9">
                         <iframe 
@@ -71,7 +71,7 @@ if(isset($_GET['id_cour'])){
                     </div>
                 </div>
 
-                <!-- Description du cours -->
+                
                 <div class="bg-white p-6 rounded-lg shadow-md">
                     <h2 class="text-xl font-bold mb-4">Description du cours</h2>
                     <p class="text-gray-600">

@@ -18,7 +18,7 @@
     <script src="https://cdn.tailwindcss.com"></script>
 </head>
 <body class="bg-gray-50">
-    <!-- Navigation -->
+    
     <nav class="bg-white shadow-lg">
         <div class="max-w-7xl mx-auto px-4">
             <div class="flex justify-between items-center h-16">
@@ -33,10 +33,10 @@
         </div>
     </nav>
 
-    <!-- Formulaire de connexion -->
+    
     <div class="min-h-screen flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
         <div class="max-w-md w-full space-y-8 bg-white p-8 rounded-lg shadow-md">
-                <!-- Affichage des erreurs -->
+                
                 <?php if(!empty($errorsLogin)): ?>
                     <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative" role="alert">
                         <?php foreach($errorsLogin as $error): ?>
