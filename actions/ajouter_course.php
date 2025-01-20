@@ -8,6 +8,7 @@ require_once '../classes/CourDocument.php';
 if ($_SERVER['REQUEST_METHOD'] === "POST") {
    
     session_start();
+    $_SESSION['errorAjouterCour']='';
     // var_dump($_SESSION);
     // var_dump($_POST);
     
@@ -23,6 +24,30 @@ if ($_SERVER['REQUEST_METHOD'] === "POST") {
     $content_type=$_POST['content_type'];
     $content_video=$_POST['video_url'];
     $content_document=$_POST['document_content'];
+    
+    //var_dump($content_type);
+    // echo "avant";
+     if($content_type==='document'){
+        
+        if(empty($titre) || empty($description) || empty($img_url) || empty($id_categorie) || empty($content_document)){
+            $_SESSION['errorAjouterCour']='il faut remplir tout les champs du contenu document';
+            header('Location: ../pages/Dashbord/dashbordEnseignant.php');
+            exit();
+            
+        }
+     }
+     elseif($content_type==='video'){
+        if(empty($titre) || empty($description) || empty($img_url) || empty($id_categorie) || empty($content_video)){
+            $_SESSION['errorAjouterCour']='il faut remplir tout les champs du contenu vidéo';
+            header('Location: ../pages/Dashbord/dashbordEnseignant.php');
+            exit();
+            echo "errer d ajouter les vides";
+
+        }
+     }
+    //  echo "apres";
+
+    
 
     // var_dump($content_video);
 

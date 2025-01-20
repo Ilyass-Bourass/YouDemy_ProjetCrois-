@@ -8,12 +8,25 @@ require_once '../../classes/Admin.php';
 
 session_start();
 
+
+
+
 if (!isset($_SESSION['is_login']) || $_SESSION['role'] !== 'ENSEIGNANT') {
     header('Location: ../../pages/login.php');
     exit();
 }
+if (isset($_SESSION['errorAjouterCour']) && !empty($_SESSION['errorAjouterCour'])) {
+    echo "<script>
+        let divAjouterCour = document.getElementById('nouveau-cours');
+        if (divAjouterCour) {
+            divAjouterCour.style.display = 'block';
+        }
+    </script>";
+}
+
 
 $id_enseignant=$_SESSION['user_id'];
+//var_dump($_SESSION['errorAjouterCour']);
 
 
 $db = new Database();
@@ -24,7 +37,7 @@ $categories=$newCategorie->getALLCategorie();
 
 // var_dump($categories);
 
-echo "<br>-------";
+//echo "<br>-------";
 
 $newTag=new Tag($connex);
 $Tags=$newTag->getALLtags();
@@ -116,37 +129,47 @@ $admin = new Admin($connex);
                     </div>
                 </div>
             </div>
+           
 
-
+            
+                
+                
              <?php if(!$admin->isBan($id_enseignant)):?>
             <div id="nouveau-cours" class="dashboard-section hidden">
+            <?php if(isset($_SESSION['errorAjouterCour'])):?>
+                <p class="bg-red-100 text-red-700 text-center font-bold border border-red-500 p-4 rounded shadow-md">
+                    <?php echo $_SESSION['errorAjouterCour']; ?>
+                </p>
+                <?php unset($_SESSION['errorAjouterCour']); ?>
+            <?php endif;?> 
+                
                 <h2 class="text-2xl font-bold mb-6">Ajouter un nouveau cours</h2>
                 <form class="bg-white p-6 rounded-lg shadow-md" action="../../actions/ajouter_course.php" method="POST">
                     
                     <div class="mb-4">
                         <label class="block text-sm font-medium text-gray-700">Titre du cours</label>
-                        <input type="text" name="titre" required 
+                        <input type="text" name="titre"  
                             class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500">
                     </div>
 
                    
                     <div class="mb-4">
                         <label class="block text-sm font-medium text-gray-700">Description</label>
-                        <textarea name="description" rows="4" required 
+                        <textarea name="description" rows="4"  
                             class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"></textarea>
                     </div>
 
                    
                     <div class="mb-4">
                         <label class="block text-sm font-medium text-gray-700">Prix du cours (€)</label>
-                        <input type="number" name="prix" step="0.01" min="0" required 
+                        <input type="number" name="prix" step="0.01" min="0"  
                             class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500">
                     </div>
 
                    
                     <div class="mb-4">
                         <label class="block text-sm font-medium text-gray-700">Image de présentation</label>
-                        <input type="url" name="img_url" required 
+                        <input type="url" name="img_url"  
                             placeholder="https://exemple.com/image.jpg"
                             class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500">
                     </div>
@@ -154,7 +177,7 @@ $admin = new Admin($connex);
                    
                     <div class="mb-4">
                         <label class="block text-sm font-medium text-gray-700">Catégorie</label>
-                        <select name="id_categorie" required 
+                        <select name="id_categorie"  
                             class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500">
                             <option value="">Sélectionnez une catégorie</option>
                             <?php foreach($categories as $categorie):?>
@@ -211,6 +234,8 @@ $admin = new Admin($connex);
                     Vous êtes banni. Vous n'avez pas la possibilité d'ajouter un cours. Veuillez contacter l'administrateur.
                 </p>
             <?php endif?>
+
+            
 
 
             <div id="mes-cours" class="dashboard-section hidden">
@@ -285,6 +310,7 @@ $admin = new Admin($connex);
             </div>
         </div>
     </div>
+   
 
 
     
