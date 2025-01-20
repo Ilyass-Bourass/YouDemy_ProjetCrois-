@@ -12,6 +12,7 @@ require_once 'CourTags.php';
         protected $id_categorie;
         protected $prix;
         protected $conn;
+        protected $errorsCour=[];
 
 
         public function __construct($db,$id_enseignant,$titre,$description,$img_url,$id_categorie,$prix){
