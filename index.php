@@ -2,6 +2,7 @@
     require_once 'config/dataBase.php';
     require_once 'classes/Cour.php';
     require_once 'classes/Admin.php';
+    require_once 'classes/Etudiant.php';
     require_once 'classes/courTags.php';
 
     session_start();
@@ -41,6 +42,8 @@
 
     $newCour=new Cour($conn,1,"","","",1,"");
 
+    $newEtudiant=new Etudiant($conn);
+
     $NombreTotalCours=$newCour->nombreTotalcours();
     $nombrePages=ceil($NombreTotalCours/3);
 
@@ -49,6 +52,12 @@
     $cours= $newCour->afficherTousLesCours($nombreOfsset);
 
     $newCourTag=new CourTag($conn);
+
+    // if($newEtudiant->CourDejaExiste(4,6)){
+    //     echo "cour deja existe";
+    // }else{
+    //     echo "cours n existe pas";
+    // }
 
      //var_dump($cours);
     
@@ -174,13 +183,21 @@
                             </div>
                             <?php if(isset($_SESSION['is_login']) && $_SESSION['role']=="ETUDIANT"):?>
                                 <?php if(!$admin->isBan($id_etudiant)):?>
-                                    <a href="actions/inscriptionCour.php?id_user=<?= $_SESSION['user_id'] ?>
-                                                                        &id_cour=<?php echo $courRecherche['id_cour'] ?>
-                                                                        &id_enseignant=<?= $courRecherche['id_enseignant']?>"
-                                    class="mt-4 block text-center bg-blue-600 text-white py-2 px-4 rounded-md hover:bg-blue-700">
-                                        inscris-cour
-                                    </a>
-                                    <?php else:?>
+                                    <?php if(!$newEtudiant->CourDejaExiste($_SESSION['user_id'],$courRecherche['id_cour'])):?>
+                                        <a href="actions/inscriptionCour.php?id_user=<?= $_SESSION['user_id'] ?>
+                                                                            &id_cour=<?php echo $courRecherche['id_cour'] ?>
+                                                                            &id_enseignant=<?= $courRecherche['id_enseignant']?>"
+                                        class="mt-4 block text-center bg-blue-600 text-white py-2 px-4 rounded-md hover:bg-blue-700">
+                                            inscris-cour
+                                        </a>
+                                    <?php else :?>
+                                        <a href="pages/Dashbord/dashbordEtudaint.php"
+                                        class="mt-4 block text-center bg-gray-600 text-white py-2 px-4 rounded-md hover:bg-blue-700">
+                                        Cours-DejaExiste
+                                </a>
+                                    <?php endif;?>
+                                    
+                                <?php else:?>
                                         <a href="pages/Dashbord/dashbordEtudaint.php"
                                     class="mt-4 block text-center bg-red-600 text-white py-2 px-4 rounded-md hover:bg-blue-700">
                                     Vous-êtes-banni
@@ -248,14 +265,21 @@
                         <span class="text-sm text-gray-600">⭐ 4.8 (128 avis)</span>
                     </div>
                     <?php if(isset($_SESSION['is_login']) && $_SESSION['role']=="ETUDIANT"):?>
-                        <?php if(!$admin->isBan($id_etudiant)):?>
-                            <a href="actions/inscriptionCour.php?id_user=<?= $_SESSION['user_id'] ?>
-                                                                &id_cour=<?php echo $cour['id_cour'] ?>
-                                                                &id_enseignant=<?= $cour['id_enseignant']?>"
-                            class="mt-4 block text-center bg-blue-600 text-white py-2 px-4 rounded-md hover:bg-blue-700">
-                                inscris-cour
-                            </a>
+                        <?php if(!$admin->isBan($id_etudiant) ):?>
+                            <?php if(!$newEtudiant->CourDejaExiste($_SESSION['user_id'],$cour['id_cour'])):?>
+                                <a href="actions/inscriptionCour.php?id_user=<?= $_SESSION['user_id'] ?>
+                                                                    &id_cour=<?php echo $cour['id_cour'] ?>
+                                                                    &id_enseignant=<?= $cour['id_enseignant']?>"
+                                class="mt-4 block text-center bg-blue-600 text-white py-2 px-4 rounded-md hover:bg-blue-700">
+                                    inscris-cour
+                                </a>
                             <?php else:?>
+                                <a href="pages/Dashbord/dashbordEtudaint.php"
+                                    class="mt-4 block text-center bg-gray-600 text-white py-2 px-4 rounded-md hover:bg-blue-700">
+                                    Cours-DejaExiste
+                                </a>
+                            <?php endif;?>
+                        <?php else:?>
                                 <a href="pages/Dashbord/dashbordEtudaint.php"
                             class="mt-4 block text-center bg-red-600 text-white py-2 px-4 rounded-md hover:bg-blue-700">
                             Vous-êtes-banni

@@ -28,5 +28,16 @@
             return $query->fetchALL(PDO::FETCH_ASSOC);
         }
 
+        public function CourDejaExiste($id_etudiant,$id_cour){
+            $sql="SELECT * from inscriptions_cours i where i.id_etudiant=:id_etudiant and id_cour=:id_cour";
+            $query=$this->connexion->prepare($sql);
+            $query->execute([
+                ":id_etudiant"=>$id_etudiant,
+                ":id_cour"=>$id_cour
+
+            ]);
+            return $query->rowCount()>0;
+        }
+
     }
 ?>
