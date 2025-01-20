@@ -38,6 +38,7 @@ $totalinscriptions=$newEnseignant->TotalCoursEnsignant($id_enseignant);
 $totalCoursEnsignant=$newEnseignant->TotalCousEnsignnat($id_enseignant);
 if($totalCoursEnsignant['total_cours']!==0){
     $moyenneCoursEtudiant=($totalinscriptions['total_inscriptions']/$totalCoursEnsignant['total_cours']);
+    $moyenneCoursEtudiant = number_format($moyenneCoursEtudiant, 2);
 }else{
     $moyenneCoursEtudiant=0;
 }
@@ -45,8 +46,11 @@ if($totalCoursEnsignant['total_cours']!==0){
 
 $admin = new Admin($connex);
 
- var_dump($totalinscriptions);
 
+
+ //var_dump($totalinscriptions);
+
+//$TotalInscriptionCour=$newEnseignant->getnumbersInscriptionsCour(2,2);
 
 
 ?>
@@ -175,7 +179,7 @@ $admin = new Admin($connex);
                 
                     <div class="mb-4">
                         <label class="block text-sm font-medium text-gray-700">Type de contenu</label>
-                        <select name="content_type" id="contentType" 
+                        <select name="content_type" id="contentType" required 
                             class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500">
                             <option value="">Sélectionnez le type</option>
                             <option value="video">Vidéo</option>
@@ -226,7 +230,7 @@ $admin = new Admin($connex);
                                 <tr>
                                         <td class="px-6 py-4 whitespace-nowrap"><?= $courEnseignant['titre']?></td>
                                         <td class="px-6 py-4 whitespace-nowrap"><?= $courEnseignant['name_categorie']?></td>
-                                        <td class="px-6 py-4 whitespace-nowrap">25</td>
+                                        <td class="px-6 py-4 whitespace-nowrap"><?= $newEnseignant->getnumbersInscriptionsCour($id_enseignant,$courEnseignant['id_cour'])['NombreInscriptions']?></td>
                                         <td class="px-6 py-4 whitespace-nowrap space-x-2">
                                             
                                             <button  onclick="window.location.href='../modifier_cours.php?id_cour=<?= $courEnseignant['id_cour']?>'" 
@@ -247,6 +251,7 @@ $admin = new Admin($connex);
                     </table>
                 </div>
             </div>
+            
 
 
             <div id="inscriptions" class="dashboard-section hidden">

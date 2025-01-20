@@ -47,7 +47,7 @@ if(isset($_GET['id_cour'])){
                     <p class="text-sm">Enseignant: <?= $DetailsCour['name']?></p>
                     <p class="text-sm">Catégorie: <?= $DetailsCour['name_categorie']?></p>
                 </div>
-                <a href="../../index.php" class="block w-full px-4 py-2 text-center bg-blue-600 rounded-md hover:bg-blue-700">
+                <a href="../index.php" class="block w-full px-4 py-2 text-center bg-blue-600 rounded-md hover:bg-blue-700">
                     Page d'accueil
                 </a>
             </div>

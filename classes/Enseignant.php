@@ -47,5 +47,15 @@
             ]);
             return $query->fetch(PDO::FETCH_ASSOC);
         }
+
+        public function getnumbersInscriptionsCour($id_enseingnant,$id_cour){
+            $sql="SELECT count(*) as NombreInscriptions from inscriptions_cours i where i.id_enseignant=:id_enseingnant and i.id_cour=:id_cour;";
+            $query=$this->connexion->prepare($sql);
+            $query->execute([
+                ":id_enseingnant"=>$id_enseingnant,
+                ":id_cour"=>$id_cour
+            ]);
+            return $query->fetch(PDO::FETCH_ASSOC);
+        }
     }
 ?>
