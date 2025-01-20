@@ -44,7 +44,7 @@
 
             <div>
                 <h2 class="mt-6 text-center text-3xl font-extrabold text-gray-900">
-                    Créer un compte
+                    Créer un comptee
                 </h2>
                 <p class="mt-2 text-center text-sm text-gray-600">
                     Ou
@@ -89,5 +89,41 @@
             </form>
         </div>
     </div>
+        
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            
+            const nameInput = document.getElementById('name');
+            const passwordInput = document.getElementById('password');
+            console.log(nameInput);    
+            console.log(passwordInput); 
+            
+            
+            const passwordError = document.createElement('p');
+            passwordError.style.color = 'red';
+            passwordError.style.fontSize = '12px';
+            passwordInput.parentNode.appendChild(passwordError);
+
+            
+            nameInput.addEventListener('input', function() {
+                if(this.value.length < 3) {
+                    this.style.backgroundColor = '#ffebee'; 
+                } else {
+                    this.style.backgroundColor = 'white';
+                }
+            });
+
+            
+            passwordInput.addEventListener('input', function() {
+                if(this.value.length < 6) {
+                    passwordError.textContent = 'Le mot de passe doit contenir au moins 6 caractères';
+                } else {
+                    passwordError.textContent = '';
+                }
+            });
+        });
+    </script>
+</body>
+</html> 
 </body>
 </html> 

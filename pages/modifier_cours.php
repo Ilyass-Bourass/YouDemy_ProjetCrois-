@@ -10,7 +10,7 @@ if(isset($_GET['id_cour'])){
 
     $id_cour=$_GET['id_cour'];
     session_start();
-    var_dump($_SESSION);
+    //var_dump($_SESSION);
 
     $db = new Database();
     $connex = $db->getConnection();
@@ -31,7 +31,7 @@ if(isset($_GET['id_cour'])){
 
 
 //var_dump($Tags);
-var_dump($coursModifier);
+//var_dump($coursModifier);
 
 
 ?>
