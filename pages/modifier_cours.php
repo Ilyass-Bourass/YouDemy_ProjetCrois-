@@ -64,6 +64,12 @@ var_dump($coursModifier);
 
     <div class="max-w-4xl mx-auto px-4 py-8">
         <div class="bg-white rounded-lg shadow-lg p-6">
+            <?php if(isset($_SESSION['errorModifierCour'])):?>
+                <p class="bg-red-100 text-red-700 text-center font-bold border border-red-500 p-4 rounded shadow-md">
+                    <?php echo $_SESSION['errorModifierCour']; ?>
+                </p>
+                <?php unset($_SESSION['errorModifierCour']); ?>
+            <?php endif;?> 
             <h1 class="text-2xl font-bold text-gray-900 mb-6">Modifier le cours</h1>
 
             <form action="../actions/modifierCourAction.php" method="POST" class="space-y-6">
@@ -77,28 +83,28 @@ var_dump($coursModifier);
             
                 <div>
                     <label class="block text-sm font-medium text-gray-700">Description</label>
-                    <textarea name="description"  rows="4" required 
+                    <textarea name="description"  rows="4"  required
                         class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"><?= $coursModifier['description']?></textarea>
                 </div>
 
 
                 <div>
                     <label class="block text-sm font-medium text-gray-700">Prix du cours (€)</label>
-                    <input type="number" name="prix" value='<?= $coursModifier['prix']?>'  step="0.01" min="0" required 
+                    <input type="number" name="prix" value='<?= $coursModifier['prix']?>'  step="0.01" min="0"  required
                         class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500">
                 </div>
 
 
                 <div>
                     <label class="block text-sm font-medium text-gray-700">Image de présentation</label>
-                    <input type="url" name="img_url" value='<?= $coursModifier['img_url']?>' required 
+                    <input type="url" name="img_url" value='<?= $coursModifier['img_url']?>'  required
                         class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500">
                 </div>
 
 
                 <div>
                     <label class="block text-sm font-medium text-gray-700">Catégorie</label>
-                    <select name="id_categorie" required 
+                    <select name="id_categorie"  required
                         class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500">
                         <?php foreach($categories as $categorie):?>
                             <option <?= ($categorie['name_categorie']==$coursModifier['name_categorie'])? 'selected':'' ?> value="<?= $categorie['id_categorie']?>"><?= $categorie['name_categorie']?></option>
@@ -128,9 +134,9 @@ var_dump($coursModifier);
 
                 <div>
                     <label class="block text-sm font-medium text-gray-700">Type de contenu</label>
-                    <select name="content_type" id="contentType"
-                        class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500" required>
-                        <option value="pas_selectionner">Sélectionnez le type</option>
+                    <select name="content_type" id="contentType" required
+                        class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500" >
+                        <option value="">Sélectionnez le type</option>
                         <option value="VIDEO">Vidéo</option>
                         <option value="DOCUMENT">Document</option>
                     </select>

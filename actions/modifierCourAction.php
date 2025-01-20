@@ -20,6 +20,29 @@ require_once '../classes/Cour.php';
         $db = new Database();
         $connex = $db->getConnection();
 
+        if($content_type==='DOCUMENT'){
+        
+            if(empty($titre) || empty($description) || empty($img_url) || empty($id_categorie) || empty($document_content) || empty($tags_id)){
+                $_SESSION['errorModifierCour']='il faut remplir tout les champs du contenu document';
+                header('Location: ../pages/modifier_cours.php?id_cour=' . $id_cour);
+                exit();
+                
+            }
+         }
+         elseif($content_type==='VIDEO'){
+            if(empty($titre) || empty($description) || empty($img_url) || empty($id_categorie) || empty($video_url) || empty($tags_id)){
+                $_SESSION['errorModifierCour']='il faut remplir tout les champs du contenu vidéo';
+                header('Location: ../pages/modifier_cours.php?id_cour=' . $id_cour);
+                exit();
+                echo "errer d ajouter les vides";
+    
+            }
+         }
+
+        var_dump($content_type);
+
+
+
         $newCour=new Cour($connex,2,$titre,$description,$img_url,$id_categorie,$prix);
         if($content_type=='DOCUMENT'){
             if($newCour->UpdateCour($id_cour,$tags_id,$content_type,$document_content)){

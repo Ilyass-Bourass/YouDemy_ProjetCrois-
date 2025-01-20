@@ -41,7 +41,7 @@ if ($_SERVER['REQUEST_METHOD'] === "POST") {
             $_SESSION['errorAjouterCour']='il faut remplir tout les champs du contenu vidéo';
             header('Location: ../pages/Dashbord/dashbordEnseignant.php');
             exit();
-            echo "errer d ajouter les vides";
+           // echo "errer d ajouter les vides";
 
         }
      }

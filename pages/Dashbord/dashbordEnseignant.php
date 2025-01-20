@@ -148,28 +148,28 @@ $admin = new Admin($connex);
                     
                     <div class="mb-4">
                         <label class="block text-sm font-medium text-gray-700">Titre du cours</label>
-                        <input type="text" name="titre"  
+                        <input type="text" name="titre"  required
                             class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500">
                     </div>
 
                    
                     <div class="mb-4">
                         <label class="block text-sm font-medium text-gray-700">Description</label>
-                        <textarea name="description" rows="4"  
+                        <textarea name="description" rows="4"  required
                             class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"></textarea>
                     </div>
 
                    
                     <div class="mb-4">
                         <label class="block text-sm font-medium text-gray-700">Prix du cours (€)</label>
-                        <input type="number" name="prix" step="0.01" min="0"  
+                        <input type="number" name="prix" step="0.01" min="0"  required
                             class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500">
                     </div>
 
                    
                     <div class="mb-4">
                         <label class="block text-sm font-medium text-gray-700">Image de présentation</label>
-                        <input type="url" name="img_url"  
+                        <input type="url" name="img_url"  required
                             placeholder="https://exemple.com/image.jpg"
                             class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500">
                     </div>
