@@ -34,7 +34,7 @@ $id_etudaint=$_SESSION['user_id'];
 
 $newEtudiant=new Etudiant($connex);
 $coursEtudiant=$newEtudiant->getAllcourEtudiant($id_etudaint);
-var_dump($coursEtudiant);
+//var_dump($coursEtudiant);
 ?>
 
 <!DOCTYPE html>

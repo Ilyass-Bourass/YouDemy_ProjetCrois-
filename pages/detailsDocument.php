@@ -14,7 +14,7 @@ if(isset($_GET['id_cour'])){
     
     $newCouVideo=new CourDocument($connex,2,"","","",2,50);
     $DetailsCour=$newCouVideo->afficherCour($id_cour);
-    var_dump($DetailsCour);
+    //var_dump($DetailsCour);
     
 }
 ?>

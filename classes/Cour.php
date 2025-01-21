@@ -25,6 +25,7 @@ require_once 'CourTags.php';
             $this->prix=$prix;
         }
 
+
         public function ajouterCour($id_tags,$content){
     
         }
@@ -36,7 +37,7 @@ require_once 'CourTags.php';
         public  function afficherTousLesCours($pageOffset) {
             $sql = "SELECT c.*,u.name,categories.name_categorie from cours c 
                     inner join users u on c.id_enseignant=u.id_user 
-                    inner join categories  on c.id_categorie=categories.id_categorie limit 3 offset $pageOffset";
+                    inner join categories  on c.id_categorie=categories.id_categorie order by c.created_at limit 3 offset $pageOffset";
             $query = $this->conn->prepare($sql);
             $query->execute();
             return $query->fetchAll(PDO::FETCH_ASSOC);
@@ -139,6 +140,6 @@ require_once 'CourTags.php';
             return $query->fetchAll(PDO::FETCH_ASSOC);
         }
 
-       
+      
     }
 ?>
